@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy — Money Manager</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      line-height: 1.6;
+      max-width: 48rem;
+      margin: 2rem auto;
+      padding: 0 1.25rem;
+      color: #1a1a1a;
+      background: #fff;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #e8e8e8; background: #121212; }
+      a { color: #8ab4f8; }
+    }
+    h1 { font-size: 1.75rem; line-height: 1.25; }
+    h2 { font-size: 1.15rem; margin-top: 2rem; border-bottom: 1px solid #ccc; padding-bottom: 0.25rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; vertical-align: top; }
+    .meta { color: #555; font-size: 0.95rem; }
+    @media (prefers-color-scheme: dark) {
+      .meta { color: #aaa; }
+      h2 { border-color: #444; }
+      th, td { border-color: #444; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Privacy Policy — Money Manager</h1>
+  <p class="meta">
+    <strong>Effective date:</strong> May 19, 2026<br />
+    <strong>App:</strong> Money Manager<br />
+    <strong>Package:</strong> com.rapps.moneymanager<br />
+    <strong>Developer:</strong> Rohith A O<br />
+    <strong>Contact:</strong> <a href="mailto:rohithao.dev@gmail.com">rohithao.dev@gmail.com</a>
+  </p>
+
+  <h2>1. Introduction</h2>
+  <p>Money Manager (“the App”) is a personal finance application that helps you track spending, budgets, and goals. This policy explains what information the App processes, how it is stored, and what choices you have.</p>
+  <p><strong>Summary:</strong> The App is designed to work <strong>entirely on your device</strong>. We do not operate servers that collect or store your financial data. We do not sell your data.</p>
+
+  <h2>2. Information we process</h2>
+  <h3>2.1 Information you enter</h3>
+  <ul>
+    <li>Transactions (amount, date, category, account, notes)</li>
+    <li>Accounts, categories, budgets, and savings goals</li>
+    <li>Optional display name and profile color</li>
+    <li>Currency and display preferences</li>
+    <li>Import files you explicitly select (e.g. CSV, Excel, PDF bank statements)</li>
+  </ul>
+
+  <h3>2.2 Information detected on Android (optional)</h3>
+  <p>If you enable <strong>Notification access</strong> for the App, it reads <strong>notification title and text</strong> from a fixed list of banking and payment apps only when the notification appears to describe a transaction (e.g. debited, credited, UPI, ₹).</p>
+  <p>From those notifications the App may derive: transaction amount and date; merchant or description; payment method; limited account hints if present in the notification.</p>
+  <p>You review detected items before they become permanent transactions. You can disable access at any time in Android <strong>Settings → Apps → Special app access → Notification access</strong>.</p>
+  <p>The App does <strong>not</strong> request the <code>READ_SMS</code> permission and does <strong>not</strong> read your SMS inbox.</p>
+
+  <h3>2.3 Security and device data</h3>
+  <ul>
+    <li><strong>App PIN:</strong> Stored only as a salted hash (PBKDF2) in the device’s secure storage. We never store your PIN in plain text.</li>
+    <li><strong>Biometric unlock (optional):</strong> Handled by your device’s OS; biometric data is not accessible to us.</li>
+    <li><strong>Lockout counters:</strong> Stored locally in app preferences.</li>
+  </ul>
+
+  <h3>2.4 What we do not collect</h3>
+  <ul>
+    <li>No account registration with us</li>
+    <li>No cloud backup of your ledger to our servers</li>
+    <li>No advertising identifiers for ad targeting</li>
+    <li>No contact list, photos, microphone, or location tracking for core features</li>
+  </ul>
+
+  <h2>3. How we use information</h2>
+  <p>We use processed information <strong>only on your device</strong> to display balances and reports, categorise transactions, send local notifications (if permitted), and export or share data when you choose.</p>
+  <p>We do <strong>not</strong> use your data for advertising or sell it to third parties.</p>
+
+  <h2>4. Storage and retention</h2>
+  <table>
+    <thead>
+      <tr><th>Data</th><th>Where stored</th><th>Retention</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Transactions, accounts, budgets, goals</td><td>Local database on device</td><td>Until you delete or clear app data</td></tr>
+      <tr><td>Settings &amp; profile name</td><td>Local preferences</td><td>Until cleared</td></tr>
+      <tr><td>PIN hash</td><td>Platform secure storage</td><td>Until PIN change or reset</td></tr>
+      <tr><td>Pending auto-detected items</td><td>Local database</td><td>Raw text removed after review; automatic purge (~30–90 days)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Sharing and third parties</h2>
+  <p>We do not transmit your financial data to our servers.</p>
+  <p>Data may leave your device when <strong>you</strong> export or share files, import a file you select, or when the App downloads open-source fonts from Google Fonts (no transaction data is included).</p>
+  <p>The App does not embed third-party analytics or advertising SDKs in its current version.</p>
+
+  <h2>6. Permissions</h2>
+  <ul>
+    <li><strong>Notification access (Android):</strong> Optional transaction detection from banking apps</li>
+    <li><strong>Post notifications:</strong> Optional local alerts</li>
+    <li><strong>Biometric / Face ID:</strong> Optional app unlock</li>
+    <li><strong>File picker:</strong> User-initiated import and export</li>
+  </ul>
+
+  <h2>7. Children</h2>
+  <p>The App is not directed at children under 13. We do not knowingly collect personal information from children.</p>
+
+  <h2>8. Your rights and choices</h2>
+  <p>You can edit or delete data in the App, turn off notification access, use <strong>Clear all data</strong> in Settings, or uninstall the App. Contact <a href="mailto:rohithao.dev@gmail.com">rohithao.dev@gmail.com</a> for other requests.</p>
+
+  <h2>9. Security</h2>
+  <p>We use hashed PINs, platform secure storage, and app sandboxing. Protect your device with a screen lock and do not share your PIN.</p>
+
+  <h2>10. International users</h2>
+  <p>Data is processed on your device where you use the phone. We do not transfer data to our own servers across borders.</p>
+
+  <h2>11. Changes</h2>
+  <p>We may update this policy and will post the new version at this URL with an updated effective date.</p>
+
+  <h2>12. Contact</h2>
+  <p>
+    Rohith A O<br />
+    Email: <a href="mailto:rohithao.dev@gmail.com">rohithao.dev@gmail.com</a>
+  </p>
+</body>
+</html>
