@@ -16,8 +16,8 @@ Baseline (what the app already has, per the privacy policy): transactions, accou
 
 | # | Feature | What users said | Status in our app | Confidence |
 |---|---------|-----------------|-------------------|------------|
-| 1 | Transfers between own accounts | Users log transfers as income/expense and charts get distorted. One reviewer: transfer was "the only thing missing". | Unknown, verify | [Certain] |
-| 2 | Recurring transactions | "Very basic" review because no recurring entries; dev called it a top request. | Unknown, verify | [Certain] |
+| 1 | Transfers between own accounts | Users log transfers as income/expense and charts get distorted. One reviewer: transfer was "the only thing missing". | Done (`transferGroupId` in `TransactionModel`) | [Certain] |
+| 2 | Recurring transactions | "Very basic" review because no recurring entries; dev called it a top request. | Done (`recurrence_service.dart`) | [Certain] |
 | 3 | Backup and restore you control | Sync/resync loses past transactions; trust drops fast. We have no cloud, so a phone loss = total data loss. Offer encrypted local file backup + optional Google Drive backup the user owns. | Missing (policy says no cloud backup) | [Likely] |
 | 4 | Accurate auto-detection | Indian users ask whether SMS/notification parsing breaks for certain banks and message formats. Wrong amounts or duplicates kill trust. | Partly present; needs dedupe + per-bank parser coverage | [Likely] |
 | 5 | No ads, no loan upsell | Users report SMS-reading apps pushing loans, insurance, BNPL. Trust was called the #1 complaint in 1-star finance reviews. | Already a strength. Say it loudly on the store listing. | [Likely] |
@@ -51,7 +51,9 @@ Baseline (what the app already has, per the privacy policy): transactions, accou
 
 ## What I'd build first
 
-1. Transfers + recurring transactions. Cheapest fixes for the most-cited complaints.
+Superseded by `feature-ranking-and-ui-animation-plan.md`, which checked the app code: transfers and recurring already exist.
+
+1. (Done in app) Transfers + recurring transactions.
 2. Encrypted backup/restore to a file and to the user's own Google Drive. Offline-only is a privacy win until the phone dies; then it's the worst review you'll get.
 3. Detection dedupe and per-bank parser tests. Auto-detection is the India differentiator, so accuracy matters more than any new feature.
 4. Subcategories and custom date range.
