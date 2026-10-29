@@ -1,0 +1,713 @@
+<title>Money Manager Motion Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: a grid of phone screens, each with one planned animation and a short caption. Colours come from the app's AppColors. */
+:root {
+  --page: #EEF2F7; --app: #F8FAFC; --surface: #FFFFFF; --surface2: #F1F5F9;
+  --outline: #E2E8F0; --outline-strong: #CBD5E1;
+  --fg: #0F172A; --fg2: #475569; --fg3: #64748B;
+  --brand: #0052FF; --brand-soft: #DCEAFF; --on-brand: #FFFFFF;
+  --income: #059669; --expense: #EF4444; --warn: #F59E0B;
+  --grad1: #0052FF; --grad2: #1E3A8A;
+  --c-blue: #0052FF; --c-amber: #F59E0B; --c-cyan: #06B6D4; --c-pink: #EC4899; --c-violet: #8B5CF6; --c-green: #059669;
+  --shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 10px 28px rgba(15, 23, 42, .07);
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fast: 150ms; --standard: 300ms; --emphasis: 400ms; --slow: 600ms; --celebration: 700ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1); --decel: cubic-bezier(0.05, 0.7, 0.1, 1); --accel: cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #050913; --app: #080D1A; --surface: #0F1629; --surface2: #172040;
+    --outline: #1E2D4F; --outline-strong: #2A3F6A;
+    --fg: #F1F5F9; --fg2: #94A3B8; --fg3: #7486A3;
+    --brand: #4D7CFF; --brand-soft: #0F1E40;
+    --income: #10B981; --expense: #F87171;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #050913; --app: #080D1A; --surface: #0F1629; --surface2: #172040;
+  --outline: #1E2D4F; --outline-strong: #2A3F6A;
+  --fg: #F1F5F9; --fg2: #94A3B8; --fg3: #7486A3;
+  --brand: #4D7CFF; --brand-soft: #0F1E40;
+  --income: #10B981; --expense: #F87171;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--fg); font-family: var(--font); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--page); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.intro { color: var(--fg2); font-size: 15px; line-height: 1.6; max-width: 66ch; margin: 8px 0 0; }
+.controls { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--page); display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding-block: 12px; margin-top: 16px; border-bottom: 1px solid var(--outline); }
+.seg { display: inline-flex; background: var(--surface2); border: 1px solid var(--outline); border-radius: 999px; padding: 3px; }
+.seg button { font: inherit; font-size: 13px; font-weight: 600; border: 0; background: none; color: var(--fg2); padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--fg); box-shadow: 0 1px 2px rgba(15, 23, 42, .12); }
+.ctl-label { font-size: 13px; font-weight: 600; color: var(--fg2); }
+.check { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--fg2); cursor: pointer; }
+.check input { width: 16px; height: 16px; accent-color: var(--brand); }
+.hint { font-size: 12.5px; color: var(--fg3); flex-basis: 100%; margin: 0; }
+
+.demos { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 36px 24px; margin-top: 28px; }
+.demo { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.phone { position: relative; width: 100%; max-width: 340px; height: 440px; margin: 0 auto; border-radius: 30px; background: var(--app); border: 1px solid var(--outline); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+.cap { max-width: 340px; width: 100%; margin: 0 auto; }
+.cap h3 { font-size: 16px; font-weight: 700; margin: 0; text-wrap: balance; }
+.cap p { margin: 5px 0 0; color: var(--fg2); font-size: 13.5px; line-height: 1.55; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag { font-size: 11.5px; font-weight: 600; color: var(--fg2); background: var(--surface2); border: 1px solid var(--outline); border-radius: 6px; padding: 2px 7px; }
+.tag.phase { color: var(--brand); background: var(--brand-soft); border-color: transparent; }
+
+.screen { position: relative; flex: 1; min-height: 0; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.ttl { font-weight: 700; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sub { font-size: 12px; color: var(--fg2); font-weight: 500; }
+.amt { font-variant-numeric: tabular-nums; }
+.btn { font: inherit; font-weight: 600; font-size: 13px; border-radius: 999px; padding: 9px 14px; border: 1px solid var(--outline-strong); background: var(--surface); color: var(--fg); cursor: pointer; }
+.btn.primary { background: var(--brand); color: var(--on-brand); border-color: transparent; }
+.btn.sm { padding: 6px 12px; font-size: 12px; }
+.btn:disabled { opacity: .45; cursor: default; }
+button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+
+.bcard { position: relative; background: linear-gradient(135deg, var(--grad1), var(--grad2)); color: var(--on-brand); border-radius: 22px; padding: 18px; }
+.bcard .lbl { font-size: 12.5px; opacity: .8; font-weight: 500; }
+.bcard .big { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; margin-top: 4px; }
+.bcard .split { display: flex; justify-content: space-between; gap: 8px; margin-top: 14px; font-size: 12px; }
+.bcard .split b { display: block; font-size: 14px; font-weight: 700; margin-top: 2px; }
+.float { position: absolute; right: 18px; top: 16px; font-weight: 700; font-size: 14px; padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, .18); opacity: 0; pointer-events: none; }
+
+.tx { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--outline); border-radius: 14px; }
+.ic { flex: none; width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; color: #FFFFFF; }
+.nm { flex: 1; min-width: 0; }
+.nm b { display: block; font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nm span { font-size: 12px; color: var(--fg2); }
+.v { font-weight: 700; font-size: 13.5px; white-space: nowrap; }
+.v.out { color: var(--expense); }
+.v.in { color: var(--income); }
+.stackcol { display: flex; flex-direction: column; gap: 8px; }
+
+.nav { display: flex; border-top: 1px solid var(--outline); background: var(--surface); padding: 6px 4px 10px; }
+.nav button { flex: 1; background: none; border: 0; font: inherit; font-size: 11px; font-weight: 500; color: var(--fg2); display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 0; cursor: pointer; }
+.nav .pill { width: 52px; height: 28px; border-radius: 14px; display: grid; place-items: center; transition: background-color var(--standard) var(--ease); }
+.nav svg { width: 18px; height: 18px; }
+.nav button[aria-selected="true"] { color: var(--brand); font-weight: 600; }
+.nav button[aria-selected="true"] .pill { background: var(--brand-soft); }
+.panes { position: relative; flex: 1; min-height: 0; }
+.pane { position: absolute; inset: 0; padding: 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+
+.pg { position: absolute; inset: 0; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--app); }
+.tx.tap { cursor: pointer; width: 100%; font: inherit; color: inherit; text-align: left; }
+.chev { color: var(--fg3); font-size: 18px; }
+.back { font: inherit; font-size: 13px; font-weight: 600; color: var(--brand); background: none; border: 0; padding: 4px 0; cursor: pointer; align-self: flex-start; }
+.detail-bal { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+.sect { font-size: 12px; font-weight: 700; color: var(--fg3); text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; }
+
+.list { flex: 1; min-height: 0; overflow-y: auto; }
+.rw { overflow: hidden; padding-bottom: 8px; box-sizing: content-box; }
+.del { flex: none; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--outline); background: var(--surface2); color: var(--fg2); font-size: 15px; line-height: 1; cursor: pointer; }
+.snack { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--fg); color: var(--app); border-radius: 12px; padding: 11px 14px; font-size: 13px; font-weight: 500; z-index: 3; }
+.snack button { font: inherit; font-weight: 700; color: var(--brand-soft); background: none; border: 0; cursor: pointer; padding: 2px 4px; }
+
+.bud { background: var(--surface); border: 1px solid var(--outline); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.bud-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.bud-top b { font-size: 14px; }
+.chip { font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 3px 9px; transition: background-color var(--standard) var(--ease), color var(--standard) var(--ease); }
+.bar { height: 10px; border-radius: 5px; background: var(--surface2); overflow: hidden; }
+.fill { height: 100%; width: 0; border-radius: 5px; transition: width var(--slow) var(--decel), background-color var(--standard) var(--ease); }
+.bud-amt { font-size: 12.5px; color: var(--fg2); }
+.bud-amt b { color: var(--fg); }
+
+.sw { position: relative; overflow: hidden; padding-bottom: 8px; box-sizing: content-box; }
+.sw .bg { position: absolute; inset: 0 0 8px 0; border-radius: 14px; display: flex; align-items: center; padding: 0 16px; font-weight: 700; font-size: 13px; color: #FFFFFF; opacity: 0; }
+.sw .bgA { background: var(--income); justify-content: flex-start; }
+.sw .bgI { background: var(--expense); justify-content: flex-end; }
+.sw[data-dir="r"] .bgA, .sw[data-dir="l"] .bgI { opacity: 1; }
+.sw .tx { position: relative; touch-action: pan-y; cursor: grab; user-select: none; }
+.sw .act { flex: none; width: 30px; height: 30px; border-radius: 9px; border: 1px solid var(--outline); background: var(--surface2); font-size: 14px; cursor: pointer; color: var(--fg2); }
+.notice { font-size: 12.5px; color: var(--fg2); min-height: 18px; }
+.notice b { color: var(--fg); }
+
+.donut-box { position: relative; width: 180px; height: 180px; margin: 4px auto 0; }
+.donut-box svg { width: 100%; height: 100%; }
+.seg-c { transition: stroke-dasharray var(--slow) var(--decel), stroke-dashoffset var(--slow) var(--decel); }
+.donut-mid { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.donut-mid b { display: block; font-size: 20px; font-weight: 800; }
+.donut-mid span { font-size: 11.5px; color: var(--fg2); }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; font-size: 12.5px; }
+.legend div { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.legend i { flex: none; width: 9px; height: 9px; border-radius: 3px; }
+.legend span { flex: 1; color: var(--fg2); }
+.legend b { font-weight: 700; }
+
+.goal { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.ring { position: relative; width: 168px; height: 168px; }
+.ring svg { width: 100%; height: 100%; }
+.ring-c { transition: stroke-dashoffset var(--slow) var(--decel), stroke var(--standard) var(--ease); }
+.ring-mid { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.ring-mid b { display: block; font-size: 26px; font-weight: 800; }
+.ring-mid span { font-size: 12px; color: var(--fg2); }
+.badge { font-size: 13px; font-weight: 700; color: var(--income); background: color-mix(in srgb, var(--income) 14%, transparent); border-radius: 999px; padding: 6px 14px; }
+.confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
+</style>
+
+<div class="wrap">
+  <h1>Money Manager motion preview</h1>
+  <p class="intro">Tap the buttons inside each phone to try the planned animations. All amounts are example data. Timings use the app's own AppDurations (150, 300, 600 and 700 ms), so the Flutter version will feel the same as this page.</p>
+
+  <div class="controls" role="group" aria-label="Preview settings">
+    <span class="ctl-label">Motion</span>
+    <div class="seg">
+      <button type="button" id="m-on" data-motion="on" aria-pressed="true">Planned</button>
+      <button type="button" id="m-off" data-motion="off" aria-pressed="false">None</button>
+    </div>
+    <label class="check"><input type="checkbox" id="slow"> Slow motion (4x)</label>
+    <p class="hint">Use None to compare, and to see what people with Android's "Remove animations" setting will get. Slow motion helps you judge the curves.</p>
+  </div>
+
+  <div class="demos">
+
+    <!-- 1 Balance -->
+    <section class="demo">
+      <div class="phone">
+        <div class="screen">
+          <div class="ttl">Home <span class="sub">October</span></div>
+          <div class="bcard">
+            <div class="lbl">Left this month</div>
+            <div class="big amt" id="bal"></div>
+            <div class="split">
+              <div>Income<b class="amt" id="inc"></b></div>
+              <div style="text-align:right">Spent<b class="amt" id="spent"></b></div>
+            </div>
+            <span class="float amt" id="balFloat"></span>
+          </div>
+          <div class="btnrow">
+            <button type="button" class="btn primary" data-d1="-450">Add ₹450 expense</button>
+            <button type="button" class="btn" data-d1="2000">Add ₹2,000 income</button>
+            <button type="button" class="btn" id="balReset">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <h3>Balance counts to the new value</h3>
+        <p>After you add a transaction, the home balance counts to the new number instead of jumping. Digits keep the same width, so the number never shakes.</p>
+        <div class="meta"><span class="tag phase">Phase 3</span><span class="tag">balance_card.dart</span><span class="tag">600 ms</span></div>
+      </div>
+    </section>
+
+    <!-- 2 Tabs -->
+    <section class="demo">
+      <div class="phone" id="p2">
+        <div class="panes">
+          <div class="pane" data-pane="0"></div>
+          <div class="pane" data-pane="1" hidden></div>
+          <div class="pane" data-pane="2" hidden></div>
+        </div>
+        <div class="nav" role="tablist">
+          <button type="button" role="tab" aria-selected="true"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg></span>Home</button>
+          <button type="button" role="tab" aria-selected="false"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></span>Transactions</button>
+          <button type="button" role="tab" aria-selected="false"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4v8l6 5"/></svg></span>Budgets</button>
+        </div>
+      </div>
+      <div class="cap">
+        <h3>Switching tabs: fade through</h3>
+        <p>The old tab fades out, then the new one fades in with a slight zoom. It tells you the whole screen changed, without sliding sideways.</p>
+        <div class="meta"><span class="tag phase">Phase 2</span><span class="tag">animations package</span><span class="tag">90 + 210 ms</span></div>
+      </div>
+    </section>
+
+    <!-- 3 Shared axis -->
+    <section class="demo">
+      <div class="phone" id="p3">
+        <div class="panes">
+          <div class="pg" id="pgList">
+            <div class="ttl">Accounts</div>
+            <div class="stackcol" id="acctList"></div>
+          </div>
+          <div class="pg" id="pgDet" hidden>
+            <button type="button" class="back" id="backBtn">‹ Accounts</button>
+            <div class="sub" id="detName"></div>
+            <div class="detail-bal amt" id="detBal"></div>
+            <div class="sect">Recent</div>
+            <div class="stackcol" id="detRows"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <h3>Opening a detail screen: shared axis</h3>
+        <p>Tap an account. The new screen slides in from the right and Back slides it away, so you can feel that you went one level deeper.</p>
+        <div class="meta"><span class="tag phase">Phase 2</span><span class="tag">app_router.dart</span><span class="tag">300 ms</span></div>
+      </div>
+    </section>
+
+    <!-- 4 List -->
+    <section class="demo">
+      <div class="phone" id="p4">
+        <div class="screen">
+          <div class="ttl">Transactions <button type="button" class="btn primary sm" id="addTx">+ Add</button></div>
+          <div class="list" id="txList"></div>
+          <div class="snack" id="snack" hidden><span id="snackMsg">Deleted</span><button type="button" id="undoBtn">Undo</button></div>
+        </div>
+      </div>
+      <div class="cap">
+        <h3>Adding and deleting in a list</h3>
+        <p>A new row slides in at the top. A deleted row folds away and Undo shows for 4 seconds, so a wrong tap is never a lost entry.</p>
+        <div class="meta"><span class="tag phase">Phase 3</span><span class="tag">transactions_screen.dart</span><span class="tag">300 ms</span></div>
+      </div>
+    </section>
+
+    <!-- 5 Budget -->
+    <section class="demo">
+      <div class="phone">
+        <div class="screen">
+          <div class="ttl">Budgets <span class="sub">October</span></div>
+          <div class="stackcol" id="budList"></div>
+          <div class="btnrow">
+            <button type="button" class="btn primary" id="budSpend">Spend ₹1,000 on food</button>
+            <button type="button" class="btn" id="budReplay">Replay fill</button>
+            <button type="button" class="btn" id="budReset">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <h3>Budget bars that warn calmly</h3>
+        <p>Bars fill to the amount spent. Green until 80%, amber up to 100%, and red only when you are actually over.</p>
+        <div class="meta"><span class="tag phase">Phase 3</span><span class="tag">budget_card.dart</span><span class="tag">600 ms</span></div>
+      </div>
+    </section>
+
+    <!-- 6 Swipe -->
+    <section class="demo">
+      <div class="phone">
+        <div class="screen">
+          <div class="ttl">Detected <span class="sub" id="detCount"></span></div>
+          <div class="stackcol" id="inbox"></div>
+          <div class="notice" id="inboxNote">Drag a card left or right.</div>
+          <div class="btnrow"><button type="button" class="btn" id="inboxReset">Reset</button></div>
+        </div>
+      </div>
+      <div class="cap">
+        <h3>Swipe to review detected payments</h3>
+        <p>Swipe right to add, left to ignore. The ✓ and ✕ buttons do the same for people who don't swipe.</p>
+        <div class="meta"><span class="tag phase">Phase 3</span><span class="tag">sms_inbox_screen.dart</span><span class="tag">300 ms</span></div>
+      </div>
+    </section>
+
+    <!-- 7 Donut -->
+    <section class="demo">
+      <div class="phone">
+        <div class="screen">
+          <div class="ttl">Spending
+            <span class="seg" role="group" aria-label="Month">
+              <button type="button" data-month="sep" aria-pressed="false">Sep</button>
+              <button type="button" data-month="oct" aria-pressed="true">Oct</button>
+            </span>
+          </div>
+          <div class="donut-box">
+            <svg viewBox="0 0 180 180" aria-hidden="true">
+              <circle cx="90" cy="90" r="64" fill="none" stroke="var(--surface2)" stroke-width="20"/>
+              <g id="donut" transform="rotate(-90 90 90)"></g>
+            </svg>
+            <div class="donut-mid"><div><b class="amt" id="donutTotal"></b><span>spent</span></div></div>
+          </div>
+          <div class="legend" id="legend"></div>
+        </div>
+      </div>
+      <div class="cap">
+        <h3>Charts that morph between months</h3>
+        <p>Switching month moves each slice from its old size to its new one, so you can see what grew instead of a chart redrawing from zero.</p>
+        <div class="meta"><span class="tag phase">Phase 4</span><span class="tag">fl_chart</span><span class="tag">600 ms</span></div>
+      </div>
+    </section>
+
+    <!-- 8 Goal -->
+    <section class="demo">
+      <div class="phone" id="p8">
+        <div class="screen">
+          <div class="ttl">Goa trip <span class="sub">Goal</span></div>
+          <div class="goal">
+            <div class="ring">
+              <svg viewBox="0 0 168 168" aria-hidden="true">
+                <circle cx="84" cy="84" r="68" fill="none" stroke="var(--surface2)" stroke-width="14"/>
+                <circle class="ring-c" id="ringC" cx="84" cy="84" r="68" fill="none" stroke="var(--brand)" stroke-width="14" stroke-linecap="round" transform="rotate(-90 84 84)"/>
+              </svg>
+              <div class="ring-mid"><div><b class="amt" id="goalPct"></b><span class="amt" id="goalAmt"></span></div></div>
+            </div>
+            <div class="badge" id="goalBadge" hidden>Goal reached</div>
+          </div>
+          <div class="btnrow">
+            <button type="button" class="btn primary" id="goalAdd">Add ₹5,000</button>
+            <button type="button" class="btn" id="goalReset">Reset</button>
+          </div>
+        </div>
+        <canvas class="confetti" id="confetti"></canvas>
+      </div>
+      <div class="cap">
+        <h3>Goal reached: the one celebration</h3>
+        <p>The only bouncy moment in the app. Confetti plays once when a goal hits 100% and never loops.</p>
+        <div class="meta"><span class="tag phase">Phase 4</span><span class="tag">goal_card.dart</span><span class="tag">700 ms</span></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const root = document.documentElement;
+  const D = { fast: 150, standard: 300, emphasis: 400, slow: 600, celebration: 700 };
+  const E = { ease: 'cubic-bezier(0.2, 0, 0, 1)', decel: 'cubic-bezier(0.05, 0.7, 0.1, 1)', accel: 'cubic-bezier(0.3, 0, 0.8, 0.15)' };
+  let motion = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let slow = 1;
+  const d = ms => (motion ? ms * slow : 0);
+  const fmt = n => (n < 0 ? '−' : '') + '₹' + Math.abs(Math.round(n)).toLocaleString('en-IN');
+  const signed = n => (n < 0 ? fmt(n) : '+' + fmt(n));
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const anim = (el, frames, ms, easing) => el.animate(frames, { duration: d(ms), easing });
+
+  function applyVars() {
+    for (const k in D) root.style.setProperty('--' + k, d(D[k]) + 'ms');
+    document.querySelectorAll('[data-motion]').forEach(b =>
+      b.setAttribute('aria-pressed', String((b.dataset.motion === 'on') === motion)));
+  }
+  document.querySelectorAll('[data-motion]').forEach(b => b.addEventListener('click', () => {
+    motion = b.dataset.motion === 'on'; applyVars();
+  }));
+  $('#slow').addEventListener('change', e => { slow = e.target.checked ? 4 : 1; applyVars(); });
+  applyVars();
+
+  function countTo(el, to, ms = D.slow, f = fmt) {
+    const from = el.dataset.v === undefined ? to : +el.dataset.v;
+    el.dataset.v = to;
+    cancelAnimationFrame(el._raf);
+    const dur = d(ms);
+    if (!dur || from === to) { el.textContent = f(to); return; }
+    const t0 = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - t0) / dur);
+      el.textContent = f(from + (to - from) * easeOut(t));
+      if (t < 1) el._raf = requestAnimationFrame(step);
+    };
+    el._raf = requestAnimationFrame(step);
+  }
+
+  function expand(w, h) {
+    const pad = getComputedStyle(w).paddingBottom;
+    return anim(w, [
+      { height: '0px', paddingBottom: '0px', opacity: 0, transform: 'translateY(-8px)' },
+      { height: h + 'px', paddingBottom: pad, opacity: 1, transform: 'translateY(0)' }
+    ], D.standard, E.decel);
+  }
+  function collapse(w) {
+    const h = w.firstElementChild ? w.querySelector('.tx').offsetHeight : w.offsetHeight;
+    const pad = getComputedStyle(w).paddingBottom;
+    return anim(w, [
+      { height: h + 'px', paddingBottom: pad, opacity: 1 },
+      { height: '0px', paddingBottom: '0px', opacity: 0 }
+    ], D.standard, E.accel);
+  }
+
+  const txHTML = (t, extra = '') =>
+    `<div class="ic" style="background:${t.c}">${t.i}</div>
+     <div class="nm"><b>${t.n}</b><span>${t.s}</span></div>
+     <div class="v amt ${t.v < 0 ? 'out' : 'in'}">${signed(t.v)}</div>${extra}`;
+
+  const C = { blue: 'var(--c-blue)', amber: 'var(--c-amber)', cyan: 'var(--c-cyan)', pink: 'var(--c-pink)', violet: 'var(--c-violet)', green: 'var(--c-green)' };
+  const TX = [
+    { n: 'Swiggy', s: 'Food · Today', v: -420, c: C.amber, i: 'Sw' },
+    { n: 'Salary', s: 'Income · 1 Oct', v: 52000, c: C.green, i: 'Sa' },
+    { n: 'Uber', s: 'Travel · Yesterday', v: -236, c: C.cyan, i: 'Ub' },
+    { n: 'Electricity bill', s: 'Bills · 27 Oct', v: -1840, c: C.violet, i: 'El' }
+  ];
+
+  /* 1 Balance */
+  const START = { bal: 24350, inc: 52000, spent: 27650 };
+  let B1 = { ...START };
+  const balEl = $('#bal'), incEl = $('#inc'), spEl = $('#spent'), flt = $('#balFloat');
+  const paint1 = () => { countTo(balEl, B1.bal); countTo(incEl, B1.inc); countTo(spEl, B1.spent); };
+  paint1();
+  document.querySelectorAll('[data-d1]').forEach(b => b.addEventListener('click', () => {
+    const v = +b.dataset.d1;
+    B1.bal += v; if (v < 0) B1.spent -= v; else B1.inc += v;
+    paint1();
+    if (navigator.vibrate) try { navigator.vibrate(10); } catch (e) {}
+    flt.textContent = signed(v);
+    anim(flt, [
+      { opacity: 0, transform: 'translateY(6px)' },
+      { opacity: 1, transform: 'translateY(0)', offset: .25 },
+      { opacity: 0, transform: 'translateY(-22px)' }
+    ], 1000, E.ease);
+  }));
+  $('#balReset').addEventListener('click', () => { B1 = { ...START }; paint1(); });
+
+  /* 2 Tabs */
+  const panes = [...document.querySelectorAll('#p2 .pane')];
+  const tabs = [...document.querySelectorAll('#p2 .nav button')];
+  panes[0].innerHTML = `<div class="ttl">Home</div>
+    <div class="bcard"><div class="lbl">Left this month</div><div class="big amt">${fmt(24350)}</div></div>
+    <div class="sect">Recent</div><div class="stackcol">${TX.slice(0, 2).map(t => `<div class="tx">${txHTML(t)}</div>`).join('')}</div>`;
+  panes[1].innerHTML = `<div class="ttl">Transactions</div><div class="stackcol">${TX.map(t => `<div class="tx">${txHTML(t)}</div>`).join('')}</div>`;
+  const miniBud = (n, s, l, col) => `<div class="bud"><div class="bud-top"><b>${n}</b><span class="bud-amt"><b class="amt">${fmt(s)}</b> of ${fmt(l)}</span></div><div class="bar"><div class="fill" style="width:${Math.min(100, s / l * 100)}%;background:${col}"></div></div></div>`;
+  panes[2].innerHTML = `<div class="ttl">Budgets</div><div class="stackcol">${miniBud('Food', 6200, 8000, 'var(--income)') + miniBud('Shopping', 4300, 5000, 'var(--warn)') + miniBud('Travel', 1800, 3000, 'var(--income)')}</div>`;
+  let curTab = 0;
+  tabs.forEach((t, i) => t.addEventListener('click', async () => {
+    if (i === curTab) return;
+    const out = panes[curTab];
+    curTab = i;
+    tabs.forEach((x, j) => x.setAttribute('aria-selected', String(j === i)));
+    try { await anim(out, [{ opacity: 1 }, { opacity: 0 }], 90, E.accel).finished; } catch (e) {}
+    panes.forEach((p, j) => { p.hidden = j !== curTab; });
+    if (curTab === i) anim(panes[i], [{ opacity: 0, transform: 'scale(.92)' }, { opacity: 1, transform: 'scale(1)' }], 210, E.decel);
+  }));
+
+  /* 3 Shared axis */
+  const ACCTS = [
+    { n: 'HDFC Savings', s: 'Bank', v: 124500, c: C.blue, i: 'HD' },
+    { n: 'SBI Salary', s: 'Bank', v: 48200, c: C.cyan, i: 'SB' },
+    { n: 'Cash', s: 'Wallet', v: 3150, c: C.green, i: 'Ca' },
+    { n: 'Credit card', s: 'Card', v: -12400, c: C.pink, i: 'CC' }
+  ];
+  const pgList = $('#pgList'), pgDet = $('#pgDet');
+  let page = 'list';
+  $('#acctList').innerHTML = ACCTS.map((a, k) =>
+    `<button type="button" class="tx tap" data-k="${k}"><div class="ic" style="background:${a.c}">${a.i}</div><div class="nm"><b>${a.n}</b><span>${a.s}</span></div><div class="v amt">${fmt(a.v)}</div><span class="chev">›</span></button>`).join('');
+  function go(fwd) {
+    const out = fwd ? pgList : pgDet, inn = fwd ? pgDet : pgList, x = fwd ? 30 : -30;
+    page = fwd ? 'det' : 'list';
+    inn.hidden = false;
+    anim(out, [{ opacity: 1, transform: 'translateX(0)' }, { opacity: 0, transform: `translateX(${-x}px)` }], D.standard, E.ease)
+      .finished.then(() => { pgList.hidden = page !== 'list'; pgDet.hidden = page !== 'det'; }).catch(() => {});
+    anim(inn, [{ opacity: 0, transform: `translateX(${x}px)` }, { opacity: 1, transform: 'translateX(0)' }], D.standard, E.ease);
+  }
+  document.querySelectorAll('#acctList .tap').forEach(b => b.addEventListener('click', () => {
+    const a = ACCTS[+b.dataset.k];
+    $('#detName').textContent = a.n;
+    $('#detBal').textContent = fmt(a.v);
+    $('#detRows').innerHTML = [TX[0], TX[2], TX[3]].map(t => `<div class="tx">${txHTML(t)}</div>`).join('');
+    go(true);
+  }));
+  $('#backBtn').addEventListener('click', () => go(false));
+
+  /* 4 List */
+  const list = $('#txList'), snack = $('#snack');
+  const POOL = [
+    { n: 'Zepto', s: 'Groceries · Just now', v: -689, c: C.green, i: 'Ze' },
+    { n: 'Movie tickets', s: 'Fun · Just now', v: -500, c: C.pink, i: 'Mo' },
+    { n: 'Refund', s: 'Income · Just now', v: 349, c: C.blue, i: 'Re' },
+    { n: 'Petrol', s: 'Travel · Just now', v: -1200, c: C.cyan, i: 'Pe' }
+  ];
+  let poolI = 0, undo = null, snackT = 0;
+  function rowEl(t) {
+    const w = document.createElement('div');
+    w.className = 'rw';
+    w.innerHTML = `<div class="tx">${txHTML(t, `<button type="button" class="del" aria-label="Delete ${t.n}">×</button>`)}</div>`;
+    w.querySelector('.del').addEventListener('click', () => del(w));
+    return w;
+  }
+  function insert(w, idx) {
+    list.insertBefore(w, list.children[idx] || null);
+    expand(w, w.querySelector('.tx').offsetHeight);
+  }
+  function del(w) {
+    const idx = [...list.children].indexOf(w);
+    w.style.pointerEvents = 'none';
+    collapse(w).finished.then(() => { w.remove(); w.style.pointerEvents = ''; }).catch(() => {});
+    undo = { w, idx };
+    showSnack();
+  }
+  function showSnack() {
+    clearTimeout(snackT);
+    if (snack.hidden) { snack.hidden = false; anim(snack, [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'translateY(0)' }], D.standard, E.decel); }
+    snackT = setTimeout(hideSnack, 4000);
+  }
+  function hideSnack() {
+    clearTimeout(snackT);
+    if (snack.hidden) return;
+    anim(snack, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(16px)' }], D.fast, E.accel).finished
+      .then(() => { snack.hidden = true; }).catch(() => {});
+  }
+  $('#undoBtn').addEventListener('click', () => { if (undo) { insert(undo.w, undo.idx); undo = null; } hideSnack(); });
+  $('#addTx').addEventListener('click', () => { insert(rowEl(POOL[poolI++ % POOL.length]), 0); list.scrollTop = 0; });
+  TX.forEach(t => list.appendChild(rowEl(t)));
+
+  /* 5 Budget */
+  const BUDS = [
+    { n: 'Food', l: 8000, s0: 5200, live: true },
+    { n: 'Shopping', l: 5000, s0: 4300 },
+    { n: 'Travel', l: 3000, s0: 1800 }
+  ];
+  $('#budList').innerHTML = BUDS.map((b, k) =>
+    `<div class="bud"><div class="bud-top"><b>${b.n}</b><span class="chip" id="chip${k}"></span></div>
+     <div class="bar"><div class="fill" id="fill${k}"></div></div>
+     <div class="bud-amt"><b class="amt" id="bs${k}"></b> of ${fmt(b.l)}</div></div>`).join('');
+  function paintBud(k) {
+    const b = BUDS[k], p = b.s / b.l;
+    const col = p > 1 ? 'var(--expense)' : p >= .8 ? 'var(--warn)' : 'var(--income)';
+    const fill = $('#fill' + k), chip = $('#chip' + k);
+    fill.style.width = Math.min(100, p * 100) + '%';
+    fill.style.backgroundColor = col;
+    chip.textContent = p > 1 ? 'Over by ' + fmt(b.s - b.l) : p >= .8 ? 'Close to limit' : 'On track';
+    chip.style.color = col;
+    chip.style.backgroundColor = `color-mix(in srgb, ${col} 14%, transparent)`;
+    countTo($('#bs' + k), b.s);
+  }
+  function resetBud() { BUDS.forEach((b, k) => { b.s = b.s0; paintBud(k); }); }
+  function replayBud() {
+    BUDS.forEach((b, k) => { const f = $('#fill' + k); f.style.transition = 'none'; f.style.width = '0%'; });
+    void document.body.offsetWidth;
+    BUDS.forEach((b, k) => { $('#fill' + k).style.transition = ''; $('#bs' + k).dataset.v = 0; paintBud(k); });
+  }
+  $('#budSpend').addEventListener('click', () => { BUDS[0].s += 1000; paintBud(0); });
+  $('#budReplay').addEventListener('click', replayBud);
+  $('#budReset').addEventListener('click', resetBud);
+  resetBud();
+
+  /* 6 Swipe */
+  const INBOX = [
+    { n: 'Swiggy', s: 'HDFC Bank · debited', v: -1250, c: C.amber, i: 'Sw', cat: 'Food' },
+    { n: 'Netflix', s: 'SBI card · debited', v: -499, c: C.pink, i: 'Ne', cat: 'Subscriptions' },
+    { n: 'UPI received', s: 'ICICI · credited', v: 2000, c: C.green, i: 'UP', cat: 'Income' }
+  ];
+  const inbox = $('#inbox'), note = $('#inboxNote');
+  const setCount = () => { $('#detCount').textContent = inbox.children.length + ' to review'; };
+  function dismiss(wrap, card, approve, t) {
+    const w = wrap.offsetWidth;
+    wrap.dataset.dir = approve ? 'r' : 'l';
+    card.style.transition = 'none';
+    const cur = card.style.transform || 'translateX(0px)';
+    card.style.pointerEvents = 'none';
+    anim(card, [{ transform: cur }, { transform: `translateX(${approve ? w * 1.1 : -w * 1.1}px)` }], D.standard, E.accel)
+      .finished.then(() => {
+        card.style.transform = `translateX(${approve ? w * 1.1 : -w * 1.1}px)`;
+        return collapse(wrap).finished;
+      }).then(() => { wrap.remove(); setCount(); }).catch(() => {});
+    note.innerHTML = approve ? `Added <b>${signed(t.v)}</b> to ${t.cat}` : `Ignored <b>${t.n}</b>`;
+  }
+  function buildInbox() {
+    inbox.innerHTML = '';
+    INBOX.forEach(t => {
+      const wrap = document.createElement('div');
+      wrap.className = 'sw';
+      wrap.innerHTML = `<div class="bg bgA">✓ Add</div><div class="bg bgI">Ignore ✕</div>
+        <div class="tx">${txHTML(t, `<button type="button" class="act" data-a="1" aria-label="Add ${t.n}">✓</button><button type="button" class="act" data-a="0" aria-label="Ignore ${t.n}">✕</button>`)}</div>`;
+      const card = wrap.querySelector('.tx');
+      let sx = 0, dx = 0, drag = false;
+      card.addEventListener('pointerdown', e => {
+        if (e.target.closest('button')) return;
+        drag = true; sx = e.clientX; dx = 0;
+        card.setPointerCapture(e.pointerId);
+        card.style.transition = 'none';
+      });
+      card.addEventListener('pointermove', e => {
+        if (!drag) return;
+        dx = e.clientX - sx;
+        card.style.transform = `translateX(${dx}px)`;
+        wrap.dataset.dir = dx > 0 ? 'r' : dx < 0 ? 'l' : '';
+      });
+      const end = () => {
+        if (!drag) return;
+        drag = false;
+        if (Math.abs(dx) > wrap.offsetWidth * .35) { dismiss(wrap, card, dx > 0, t); return; }
+        card.style.transition = `transform ${d(D.standard)}ms ${E.ease}`;
+        card.style.transform = '';
+        setTimeout(() => { if (!drag) wrap.dataset.dir = ''; }, d(D.standard));
+      };
+      card.addEventListener('pointerup', end);
+      card.addEventListener('pointercancel', end);
+      wrap.querySelectorAll('.act').forEach(b => b.addEventListener('click', () => dismiss(wrap, card, b.dataset.a === '1', t)));
+      inbox.appendChild(wrap);
+    });
+    note.textContent = 'Drag a card left or right.';
+    setCount();
+  }
+  $('#inboxReset').addEventListener('click', buildInbox);
+  buildInbox();
+
+  /* 7 Donut */
+  const CATS = [
+    { n: 'Rent', c: 'var(--c-blue)' }, { n: 'Food', c: 'var(--c-amber)' }, { n: 'Travel', c: 'var(--c-cyan)' },
+    { n: 'Shopping', c: 'var(--c-pink)' }, { n: 'Bills', c: 'var(--c-violet)' }
+  ];
+  const MONTHS = { sep: [15000, 6200, 2100, 4800, 2300], oct: [15000, 8400, 5600, 1900, 2500] };
+  const R = 64, CIRC = 2 * Math.PI * R, GAP = 3;
+  const g = $('#donut');
+  g.innerHTML = CATS.map(c => `<circle class="seg-c" cx="90" cy="90" r="${R}" fill="none" stroke="${c.c}" stroke-width="20"/>`).join('');
+  $('#legend').innerHTML = CATS.map((c, k) => `<div><i style="background:${c.c}"></i><span>${c.n}</span><b class="amt" id="lg${k}"></b></div>`).join('');
+  function paintDonut(m) {
+    const vals = MONTHS[m], total = vals.reduce((a, b) => a + b, 0);
+    let start = 0;
+    [...g.children].forEach((el, k) => {
+      const len = vals[k] / total * CIRC;
+      el.style.strokeDasharray = `${Math.max(len - GAP, 0)} ${CIRC}`;
+      el.style.strokeDashoffset = String(-start);
+      start += len;
+      countTo($('#lg' + k), vals[k]);
+    });
+    countTo($('#donutTotal'), total);
+    document.querySelectorAll('[data-month]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.month === m)));
+  }
+  document.querySelectorAll('[data-month]').forEach(b => b.addEventListener('click', () => paintDonut(b.dataset.month)));
+  paintDonut('oct');
+
+  /* 8 Goal */
+  const GR = 68, GC = 2 * Math.PI * GR, TARGET = 30000, SAVED0 = 20000;
+  let saved = SAVED0, done = false;
+  const ring = $('#ringC'), badge = $('#goalBadge'), addBtn = $('#goalAdd'), cv = $('#confetti');
+  ring.style.strokeDasharray = String(GC);
+  function paintGoal() {
+    const p = Math.min(1, saved / TARGET);
+    ring.style.strokeDashoffset = String(GC * (1 - p));
+    ring.style.stroke = p >= 1 ? 'var(--income)' : 'var(--brand)';
+    countTo($('#goalPct'), Math.round(p * 100), D.slow, n => Math.round(n) + '%');
+    countTo($('#goalAmt'), saved, D.slow, n => fmt(n) + ' of ' + fmt(TARGET));
+    addBtn.disabled = p >= 1;
+    if (p >= 1 && !done) {
+      done = true;
+      setTimeout(() => {
+        badge.hidden = false;
+        anim(badge, [{ transform: 'scale(.6)', opacity: 0 }, { transform: 'scale(1.08)', opacity: 1, offset: .6 }, { transform: 'scale(1)' }], D.celebration, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+        confetti();
+      }, d(D.slow));
+    }
+  }
+  function confetti() {
+    if (!motion) return;
+    const box = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    cv.width = box.width * dpr; cv.height = box.height * dpr;
+    const ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const css = getComputedStyle(root);
+    const cols = ['--c-blue', '--c-amber', '--c-cyan', '--c-pink', '--c-violet', '--c-green'].map(v => css.getPropertyValue(v).trim());
+    const ox = box.width / 2, oy = box.height * 0.42;
+    const parts = Array.from({ length: 80 }, () => {
+      const a = -Math.PI / 2 + (Math.random() - .5) * Math.PI * 1.1, sp = 4 + Math.random() * 5;
+      return { x: ox, y: oy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: Math.random() * 6, vr: (Math.random() - .5) * .3, w: 5 + Math.random() * 4, h: 8 + Math.random() * 5, c: cols[Math.floor(Math.random() * cols.length)] };
+    });
+    const total = 1500 * slow, t0 = performance.now();
+    let last = t0;
+    const frame = now => {
+      const dt = Math.min(2, (now - last) / 16.7) / slow; last = now;
+      const life = (now - t0) / total;
+      ctx.clearRect(0, 0, box.width, box.height);
+      ctx.globalAlpha = Math.max(0, 1 - Math.max(0, life - .6) / .4);
+      parts.forEach(p => {
+        p.vy += 0.18 * dt; p.vx *= Math.pow(0.985, dt);
+        p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+        ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r * 2)));
+        ctx.restore();
+      });
+      if (life < 1) requestAnimationFrame(frame); else ctx.clearRect(0, 0, box.width, box.height);
+    };
+    requestAnimationFrame(frame);
+  }
+  addBtn.addEventListener('click', () => { saved = Math.min(TARGET, saved + 5000); paintGoal(); });
+  $('#goalReset').addEventListener('click', () => { saved = SAVED0; done = false; badge.hidden = true; paintGoal(); });
+  paintGoal();
+})();
+</script>
